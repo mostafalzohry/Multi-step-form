@@ -1,23 +1,23 @@
-import React from 'react';
-import { TextField, Button, MenuItem } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-
-
+import React from "react";
+import { TextField, Button, MenuItem, Box } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const Step2 = ({ nextStep, prevStep, formData, setFormData }) => {
-
   const schema = yup.object().shape({
-    country: yup.string().required('Country is required'),
-    phoneNumber: yup.string().required('Phone Number is required'),
+    country: yup.string().required("Country is required"),
+    phoneNumber: yup.string().required("Phone Number is required"),
   });
 
-
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: formData,
     resolver: yupResolver(schema),
-    mode: 'onTouched',
+    mode: "onTouched",
   });
 
   const handleChange = (field) => (event) => {
@@ -32,13 +32,13 @@ const Step2 = ({ nextStep, prevStep, formData, setFormData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        {...register('country')}
+        {...register("country")}
         name="country"
         select
         label="Country"
         variant="outlined"
         value={formData.country}
-        onChange={handleChange('country')}
+        onChange={handleChange("country")}
         error={!!errors.country}
         helperText={errors.country?.message}
         fullWidth
@@ -47,19 +47,25 @@ const Step2 = ({ nextStep, prevStep, formData, setFormData }) => {
         <MenuItem value="Egypt">Egypt</MenuItem>
       </TextField>
       <TextField
-        {...register('phoneNumber')}
+        {...register("phoneNumber")}
         name="phoneNumber"
         label="Phone Number"
         variant="outlined"
         value={formData.phoneNumber}
-        onChange={handleChange('phoneNumber')}
+        onChange={handleChange("phoneNumber")}
         error={!!errors.phoneNumber}
         helperText={errors.phoneNumber?.message}
         fullWidth
         margin="normal"
       />
-      <Button onClick={prevStep} variant="contained">Back</Button>
-      <Button type="submit" variant="contained" color="primary">Next</Button>
+      <Box display="flex" justifyContent="flex-end">
+        <Button onClick={prevStep} variant="contained">
+          Back
+        </Button>
+        <Button type="submit" variant="contained" color="primary">
+          Next
+        </Button>
+      </Box>
     </form>
   );
 };

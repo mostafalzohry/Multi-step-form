@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -58,9 +58,11 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
         fullWidth
         margin="normal"
       />
-      <Button type="submit" variant="contained" color="primary">
-        Next
-      </Button>
+      <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Button type="submit" variant="contained" color="primary">
+          Next
+        </Button>
+      </Box>
     </form>
   );
 };
