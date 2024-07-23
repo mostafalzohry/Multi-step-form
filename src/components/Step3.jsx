@@ -1,77 +1,132 @@
-import React from 'react';
-import { TextField, Button, Box } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import React, { useState, useRef } from 'react';
+import { Button, Box, Typography, IconButton } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const Step3 = ({ prevStep, formData, setFormData, onSubmitForm }) => {
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const fileInputRef = useRef(null);
+
   const schema = yup.object().shape({
-    password: yup
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
+    companyLogo: yup
+      .mixed()
+      .required('Company logo is required')
+      .test('fileSize', 'The file is too large. Please upload an image smaller than 500 KB.', (value) => {
+        return value && value.size <= 500 * 1024;
+      })
+      .test('fileType', 'Unsupported file format. Please use JPEG, PNG, or GIF.', (value) => {
+        return value && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
+      }),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    clearErrors
   } = useForm({
     defaultValues: formData,
     resolver: yupResolver(schema),
-    mode: 'onTouched',
+    mode: "onTouched",
   });
 
-  const handleChange = (field) => (event) => {
-    setFormData({ ...formData, [field]: event.target.value });
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setValue('companyLogo', file);
+      setFormData({ ...formData, companyLogo: file });
+      setPreviewUrl(URL.createObjectURL(file));
+      clearErrors('companyLogo');
+    }
+  };
+
+  const handleReplaceImage = () => {
+    fileInputRef.current.click();
   };
 
   const onSubmit = (data) => {
     setFormData({ ...formData, ...data });
-    onSubmitForm();
+    onSubmitForm({ ...formData, ...data });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <TextField
-        {...register('password')}
-        name='password'
-        type='password'
-        label='Password'
-        variant='outlined'
-        value={formData.password}
-        onChange={handleChange('password')}
-        error={!!errors.password}
-        helperText={errors.password?.message}
-        fullWidth
-        margin='normal'
-      />
-      <TextField
-        {...register('confirmPassword')}
-        name='confirmPassword'
-        type='password'
-        label='Confirm Password'
-        variant='outlined'
-        value={formData.confirmPassword}
-        onChange={handleChange('confirmPassword')}
-        error={!!errors.confirmPassword}
-        helperText={errors.confirmPassword?.message}
-        fullWidth
-        margin='normal'
-      />
-      <Box display='flex' justifyContent='flex-end'>
-        <Button onClick={prevStep} variant='contained'>
-          Back
-        </Button>
-        <Button type='submit' variant='contained' color='primary'>
-          Submit
-        </Button>
-      </Box>
-    </form>
+    <Box sx={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '8px' }}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Typography variant="h6" gutterBottom>
+          Upload Company Logo
+        </Typography>
+        <Box
+          sx={{
+            border: '2px dashed #ccc',
+            borderRadius: '4px',
+            padding: '20px',
+            textAlign: 'center',
+            marginBottom: '20px',
+            position: 'relative',
+            height: '200px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <input
+            {...register("companyLogo")}
+            accept="image/*"
+            type="file"
+            id="company-logo-upload"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleImageChange}
+          />
+          {!previewUrl ? (
+            <label htmlFor="company-logo-upload">
+              <IconButton component="span" size="large">
+                <AddPhotoAlternateIcon fontSize="large" />
+              </IconButton>
+            </label>
+          ) : (
+            <Box
+              component="img"
+              src={previewUrl}
+              alt="Company Logo Preview"
+              sx={{
+                maxWidth: '100%',
+                maxHeight: '150px',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+          )}
+          <Typography variant="body2" color="textSecondary">
+            Only images with a size lower than 500 KB are allowed.
+          </Typography>
+        </Box>
+        {errors.companyLogo && (
+          <Box sx={{ marginBottom: '10px' }}>
+            <Typography color="error" variant="body2">
+              {errors.companyLogo.message}
+            </Typography>
+            <Button onClick={handleReplaceImage} variant="outlined" color="primary" sx={{ mt: 1 }}>
+              Replace Image
+            </Button>
+          </Box>
+        )}
+        <Box display="flex" justifyContent="space-between" mt={2}>
+          <Button onClick={prevStep} variant="contained">
+            Back
+          </Button>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </Box>
+      </form>
+    </Box>
   );
 };
 
