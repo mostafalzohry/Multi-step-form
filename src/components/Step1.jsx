@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextField, Button, Box, InputAdornment, Grid } from '@mui/material';
+import { TextField, Button, Box, InputAdornment, Grid, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,7 +16,7 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
       .email('Invalid email')
       .required('Business Email is required'),
     country: yup.string().required('Country is required'),
-    phoneNumber: yup.string().required('Phone Number is required'),
+    phoneNumber: yup.number().required('Phone Number is required'),
     password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
@@ -49,31 +49,33 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
   return (
     <Box sx={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '8px' }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          {...register('fullName')}
-          name='fullName'
-          label='Full Name'
-          variant='outlined'
-          value={formData.fullName}
-          onChange={handleChange('fullName')}
-          error={!!errors.fullName}
-          helperText={errors.fullName?.message}
-          fullWidth
-          margin='normal'
-        />
-        <TextField
-          {...register('businessEmail')}
-          name='businessEmail'
-          label='Business Email'
-          variant='outlined'
-          value={formData.businessEmail}
-          onChange={handleChange('businessEmail')}
-          error={!!errors.businessEmail}
-          helperText={errors.businessEmail?.message}
-          fullWidth
-          margin='normal'
-        />
         <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              {...register('fullName')}
+              name='fullName'
+              label='Full Name'
+              variant='outlined'
+              value={formData.fullName}
+              onChange={handleChange('fullName')}
+              error={!!errors.fullName}
+              helperText={errors.fullName?.message}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register('businessEmail')}
+              name='businessEmail'
+              label='Business Email'
+              variant='outlined'
+              value={formData.businessEmail}
+              onChange={handleChange('businessEmail')}
+              error={!!errors.businessEmail}
+              helperText={errors.businessEmail?.message}
+              fullWidth
+            />
+          </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               {...register('country')}
@@ -85,7 +87,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               error={!!errors.country}
               helperText={errors.country?.message}
               fullWidth
-              margin='normal'
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -104,60 +105,61 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
                 ),
               }}
               fullWidth
-              margin='normal'
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register('password')}
+              name='password'
+              type={showPassword ? 'text' : 'password'}
+              label='Password'
+              variant='outlined'
+              value={formData.password}
+              onChange={handleChange('password')}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <Box
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </Box>
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register('confirmPassword')}
+              name='confirmPassword'
+              type={showConfirmPassword ? 'text' : 'password'}
+              label='Confirm Password'
+              variant='outlined'
+              value={formData.confirmPassword}
+              onChange={handleChange('confirmPassword')}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <Box
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                    </Box>
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
             />
           </Grid>
         </Grid>
-        <TextField
-          {...register('password')}
-          name='password'
-          type={showPassword ? 'text' : 'password'}
-          label='Password'
-          variant='outlined'
-          value={formData.password}
-          onChange={handleChange('password')}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <Box
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </Box>
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-          margin='normal'
-        />
-        <TextField
-          {...register('confirmPassword')}
-          name='confirmPassword'
-          type={showConfirmPassword ? 'text' : 'password'}
-          label='Confirm Password'
-          variant='outlined'
-          value={formData.confirmPassword}
-          onChange={handleChange('confirmPassword')}
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <Box
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                </Box>
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-          margin='normal'
-        />
         <Box display='flex' justifyContent='flex-end' mt={2}>
           <Button type='submit' variant='contained' color='primary'>
             Next
@@ -169,3 +171,4 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
 };
 
 export default Step1;
+

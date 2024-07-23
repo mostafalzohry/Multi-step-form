@@ -122,7 +122,7 @@ const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
             Back
           </Button>
           <Button type="submit" variant="contained" color="primary">
-            Submit
+            Next
           </Button>
         </Box>
       </form>

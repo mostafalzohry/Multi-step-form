@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.16.4",
     "@mui/material": "^5.16.4",
+    "axios": "^1.7.2",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import {
   Stepper,
   Step,
@@ -12,7 +13,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import SecurityIcon from "@mui/icons-material/Security";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-
 import { styled } from "@mui/material/styles";
 import LockIcon from "@mui/icons-material/Lock";
 import Step1 from "./Step1";
@@ -89,7 +89,7 @@ const MultiStepForm = () => {
     { label: "Personal Info", icon: <AccountCircleIcon /> },
     { label: "Company Info", icon: <ApartmentIcon /> },
     { label: "Company Logo", icon: <AddPhotoAlternateIcon /> },
-    { label: "Confirmation", icon: <SecurityIcon /> }, // New step
+    { label: "Confirmation", icon: <SecurityIcon /> }, 
   ];
 
   const [formData, setFormData] = useState({
@@ -107,13 +107,46 @@ const MultiStepForm = () => {
     companyPhoneNumber: "",
     companyPhoneNumber2: "",
     companyLogo: "",
+    lang:""
   });
 
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
-  const onSubmitForm = () => {
-    console.log("Form submitted:", formData);
+
+  const onSubmitForm = async () => {
+    const formDataToSend = new FormData();
+    formDataToSend.append('user_email', formData.businessEmail);
+    formDataToSend.append('user_password', formData.password);
+    formDataToSend.append('user_password_confirmation', formData.confirmPassword);
+    formDataToSend.append('lang', formData.lang);
+    formDataToSend.append('company_name', formData.companyName);
+    formDataToSend.append('company_address', formData.address);
+    formDataToSend.append('company_phone', formData.companyPhoneNumber);
+    formDataToSend.append('company_business_email', formData.companyBusinessEmail);
+    formDataToSend.append('company_avatar', formData.companyLogo);
+    formDataToSend.append('company_country_id', formData.companyCountry);
+    formDataToSend.append('company_city_id', formData.city);
+    formDataToSend.append('company_extra_data[phone]', formData.companyPhoneNumber2);
+    formDataToSend.append('user_full_name', formData.fullName);
+    formDataToSend.append('user_phone', formData.phoneNumber);
+    formDataToSend.append('user_position', 'the position');
+    formDataToSend.append('user_nationality', formData.country);
+    formDataToSend.append('user_extra_data[phone]', formData.phoneNumber);
+   console.log("form data",formData)
+   console.log("formDataToSend",formDataToSend)
+
+    try {
+      const response = await axios.post('https://id.safav2.io.safavisa.com/register', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Form submitted:', response.data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
+
 
   const renderStepContent = (stepIndex) => {
     switch (stepIndex) {
