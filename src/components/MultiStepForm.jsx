@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import {
   Stepper,
@@ -19,6 +18,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import Step4 from "./Step4"; 
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -70,6 +70,7 @@ function CustomStepIcon(props) {
     1: <AccountCircleIcon />,
     2: <ApartmentIcon />,
     3: <SecurityIcon />,
+    4: <LockIcon /> 
   };
 
   return (
@@ -88,6 +89,7 @@ const MultiStepForm = () => {
     { label: "Personal Info", icon: <AccountCircleIcon /> },
     { label: "Company Info", icon: <ApartmentIcon /> },
     { label: "Company Logo", icon: <AddPhotoAlternateIcon /> },
+    { label: "Confirmation", icon: <SecurityIcon /> }, // New step
   ];
 
   const [formData, setFormData] = useState({
@@ -136,8 +138,17 @@ const MultiStepForm = () => {
         return (
           <Step3
             prevStep={prevStep}
+            nextStep={nextStep}
             formData={formData}
             setFormData={setFormData}
+            onSubmitForm={onSubmitForm}
+          />
+        );
+      case 3:
+        return (
+          <Step4
+            prevStep={prevStep}
+            formData={formData}
             onSubmitForm={onSubmitForm}
           />
         );
@@ -145,6 +156,7 @@ const MultiStepForm = () => {
         return null;
     }
   };
+
   return (
     <Box sx={{ backgroundColor: "#f0f0f0", minHeight: "100vh", p: 4 }}>
       <Container

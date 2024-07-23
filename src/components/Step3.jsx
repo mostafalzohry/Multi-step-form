@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
-const Step3 = ({ prevStep, formData, setFormData, onSubmitForm }) => {
+const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -49,7 +49,7 @@ const Step3 = ({ prevStep, formData, setFormData, onSubmitForm }) => {
 
   const onSubmit = (data) => {
     setFormData({ ...formData, ...data });
-    onSubmitForm({ ...formData, ...data });
+    nextStep();
   };
 
   return (
