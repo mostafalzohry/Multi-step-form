@@ -19,6 +19,7 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4"; 
+import Congratulations from "./Congratulations";
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -85,6 +86,8 @@ function CustomStepIcon(props) {
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(0);
+  const [submissionComplete, setSubmissionComplete] = useState(false);
+
   const steps = [
     { label: "Personal Info", icon: <AccountCircleIcon /> },
     { label: "Company Info", icon: <ApartmentIcon /> },
@@ -132,9 +135,7 @@ const MultiStepForm = () => {
     formDataToSend.append('user_position', 'the position');
     formDataToSend.append('user_nationality', formData.country);
     formDataToSend.append('user_extra_data[phone]', formData.phoneNumber);
-   console.log("form data",formData)
-   console.log("formDataToSend",formDataToSend)
-
+  
     try {
       const response = await axios.post('https://id.safav2.io.safavisa.com/register', formDataToSend, {
         headers: {
@@ -144,6 +145,8 @@ const MultiStepForm = () => {
       console.log('Form submitted:', response.data);
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally {
+      setSubmissionComplete(true);
     }
   };
 
@@ -189,6 +192,11 @@ const MultiStepForm = () => {
         return null;
     }
   };
+
+
+  if (submissionComplete) {
+    return <Congratulations />;
+  }
 
   return (
     <Box sx={{ backgroundColor: "#f0f0f0", minHeight: "100vh", p: 4 }}>
