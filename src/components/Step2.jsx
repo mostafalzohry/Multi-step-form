@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { fetchCountriesAndCities } from "./apiService";
+import buttonStyles from "../styles/buttonStyles";
 
 const Step2 = ({ prevStep, formData, setFormData, nextStep }) => {
   const [countries, setCountries] = useState([]);
@@ -11,17 +12,21 @@ const Step2 = ({ prevStep, formData, setFormData, nextStep }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
 
   const schema = yup.object().shape({
-    companyName: yup.string().required('Company Name is required'),
-    lang: yup.string().required('Language is required'),
-    address: yup.string().required("Address is required"),
+    companyName: yup.string().required("Please enter your company name."),
+    lang: yup.string().required("Please select a language."),
+    address: yup.string().required("Please enter your address."),
     companyBusinessEmail: yup
       .string()
-      .email("Invalid email")
-      .required("Business Email is required"),
-    companyCountry: yup.string().required("Country is required"),
-    city: yup.string().required("City is required"),
-    companyPhoneNumber: yup.number().typeError("Phone Number is required").required("Phone Number is required"),
-    companyPhoneNumber2: yup.number().typeError("Phone Number is required").required("Phone Number is required"),
+      .email("Please enter a valid business email address.")
+      .required("Business email is required."),
+    companyCountry: yup.string().required("Please select the company's country."),
+    city: yup.string().required("Please enter the city."),
+    companyPhoneNumber: yup
+      .number("Primary phone number must be a valid number.")
+      .required("Please enter the company's primary phone number."),
+    companyPhoneNumber2: yup
+      .number("Secondary phone number must be a valid number.")
+      .required("Please enter the company's secondary phone number."),
   });
 
   const {
@@ -202,11 +207,20 @@ const Step2 = ({ prevStep, formData, setFormData, nextStep }) => {
             />
           </Grid>
         </Grid>
-        <Box display="flex" justifyContent="space-between" mt={2}>
-          <Button onClick={prevStep} variant="contained">
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Button
+            onClick={prevStep}
+            variant="contained"
+            sx={buttonStyles.backButton}
+          >
             Back
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={buttonStyles.nextButton}
+          >
             Next
           </Button>
         </Box>

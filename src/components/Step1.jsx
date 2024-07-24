@@ -4,6 +4,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import buttonStyles from '../styles/buttonStyles';
 
 const Step1 = ({ nextStep, formData, setFormData }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,8 +17,11 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
       .email('Invalid email')
       .required('Business Email is required'),
     country: yup.string().required('Country is required'),
-    phoneNumber: yup.number().required('Phone Number is required'),
-    password: yup
+    phoneNumber: yup
+    .number()
+    .typeError("Phone number must be a valid number.")
+    .required("Phone number is required."),
+        password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
@@ -160,8 +164,13 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
             />
           </Grid>
         </Grid>
-        <Box display='flex' justifyContent='flex-end' mt={2}>
-          <Button type='submit' variant='contained' color='primary'>
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={buttonStyles.nextButton}
+          >
             Next
           </Button>
         </Box>

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import buttonStyles from '../styles/buttonStyles';
 
 const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -12,13 +13,24 @@ const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
   const schema = yup.object().shape({
     companyLogo: yup
       .mixed()
-      .required('Company logo is required')
-      .test('fileSize', 'The file is too large. Please upload an image smaller than 500 KB.', (value) => {
-        return value && value.size <= 500 * 1024;
-      })
-      .test('fileType', 'Unsupported file format. Please use JPEG, PNG, or GIF.', (value) => {
-        return value && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-      }),
+      .required("Company logo is required.")
+      .test(
+        "fileSize",
+        "The file size exceeds 500 KB. Please upload a smaller image.",
+        (value) => {
+          return value && value.size <= 500 * 1024;
+        }
+      )
+      .test(
+        "fileType",
+        "Unsupported file type. Please upload a JPEG, PNG, or GIF image.",
+        (value) => {
+          return (
+            value &&
+            ["image/jpeg", "image/png", "image/gif"].includes(value.type)
+          );
+        }
+      ),
   });
 
   const {
@@ -117,11 +129,20 @@ const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
             </Button>
           </Box>
         )}
-        <Box display="flex" justifyContent="space-between" mt={2}>
-          <Button onClick={prevStep} variant="contained">
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Button
+            onClick={prevStep}
+            variant="contained"
+            sx={buttonStyles.backButton}
+          >
             Back
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={buttonStyles.nextButton}
+          >
             Next
           </Button>
         </Box>

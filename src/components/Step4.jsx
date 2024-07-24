@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import buttonStyles from "../styles/buttonStyles";
 
 const Step4 = ({ prevStep, formData, onSubmitForm }) => {
   return (
@@ -24,11 +25,21 @@ const Step4 = ({ prevStep, formData, onSubmitForm }) => {
       <Typography variant="body1" color="primary" gutterBottom>
         {formData.businessEmail}
       </Typography>
-      <Box display="flex" justifyContent="space-between" mt={2}>
-        <Button onClick={prevStep} variant="contained">
+
+      <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Button
+          onClick={prevStep}
+          variant="contained"
+          sx={buttonStyles.backButton}
+        >
           Back
         </Button>
-        <Button onClick={onSubmitForm} variant="contained" color="primary">
+        <Button
+          onClick={onSubmitForm}
+          variant="contained"
+          color="primary"
+          sx={buttonStyles.nextButton}
+        >
           Confirm
         </Button>
       </Box>
