@@ -6,7 +6,7 @@ import * as yup from "yup";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import buttonStyles from '../styles/buttonStyles';
 
-const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
+const Step3 = ({ prevStep, formData, setFormData, nextStep }) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -115,9 +115,7 @@ const Step3 = ({ prevStep, formData, setFormData, onSubmitForm , nextStep}) => {
               }}
             />
           )}
-          <Typography variant="body2" color="textSecondary">
-            Only images with a size lower than 500 KB are allowed.
-          </Typography>
+         
         </Box>
         {errors.companyLogo && (
           <Box sx={{ marginBottom: '10px' }}>

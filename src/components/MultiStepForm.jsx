@@ -70,8 +70,8 @@ function CustomStepIcon(props) {
   const icons = {
     1: <AccountCircleIcon />,
     2: <ApartmentIcon />,
-    3: <SecurityIcon />,
-    4: <LockIcon /> 
+    3: <AddPhotoAlternateIcon />,
+    4: <LockIcon />
   };
 
   return (
@@ -87,6 +87,7 @@ function CustomStepIcon(props) {
 const MultiStepForm = () => {
   const [step, setStep] = useState(0);
   const [submissionComplete, setSubmissionComplete] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const steps = [
     { label: "Personal Info", icon: <AccountCircleIcon /> },
@@ -110,13 +111,14 @@ const MultiStepForm = () => {
     companyPhoneNumber: "",
     companyPhoneNumber2: "",
     companyLogo: "",
-    lang:""
+    lang:"ar"
   });
 
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   const onSubmitForm = async () => {
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append('user_email', formData.businessEmail);
     formDataToSend.append('user_password', formData.password);
@@ -136,6 +138,7 @@ const MultiStepForm = () => {
     formDataToSend.append('user_nationality', formData.country);
     formDataToSend.append('user_extra_data[phone]', formData.phoneNumber);
   
+    console.log("form data in submit", formData);
     try {
       const response = await axios.post('https://id.safav2.io.safavisa.com/register', formDataToSend, {
         headers: {
@@ -146,10 +149,10 @@ const MultiStepForm = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
+      setLoading(false);
       setSubmissionComplete(true);
     }
   };
-
 
   const renderStepContent = (stepIndex) => {
     switch (stepIndex) {
@@ -186,13 +189,13 @@ const MultiStepForm = () => {
             prevStep={prevStep}
             formData={formData}
             onSubmitForm={onSubmitForm}
+            loading={loading}
           />
         );
       default:
         return null;
     }
   };
-
 
   if (submissionComplete) {
     return <Congratulations />;
@@ -222,7 +225,9 @@ const MultiStepForm = () => {
               </Step>
             ))}
           </Stepper>
-          <Box sx={{ p: 3, mt: 2 }}>{renderStepContent(step)}</Box>
+          <Box sx={{ p: 3, mt: 2 }}>
+            {renderStepContent(step)}
+          </Box>
         </Box>
       </Container>
     </Box>

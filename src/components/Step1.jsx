@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { TextField, Button, Box, InputAdornment, Grid, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Box, InputAdornment, Grid } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,10 +18,10 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
       .required('Business Email is required'),
     country: yup.string().required('Country is required'),
     phoneNumber: yup
-    .number()
-    .typeError("Phone number must be a valid number.")
-    .required("Phone number is required."),
-        password: yup
+      .number()
+      .typeError("Phone number must be a valid number.")
+      .required("Phone number is required."),
+    password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
@@ -35,15 +35,12 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
     register,
     handleSubmit,
     formState: { errors },
+ 
   } = useForm({
     defaultValues: formData,
     resolver: yupResolver(schema),
     mode: 'onTouched',
   });
-
-  const handleChange = (field) => (event) => {
-    setFormData({ ...formData, [field]: event.target.value });
-  };
 
   const onSubmit = (data) => {
     setFormData({ ...formData, ...data });
@@ -60,8 +57,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               name='fullName'
               label='Full Name'
               variant='outlined'
-              value={formData.fullName}
-              onChange={handleChange('fullName')}
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
               fullWidth
@@ -73,8 +68,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               name='businessEmail'
               label='Business Email'
               variant='outlined'
-              value={formData.businessEmail}
-              onChange={handleChange('businessEmail')}
               error={!!errors.businessEmail}
               helperText={errors.businessEmail?.message}
               fullWidth
@@ -86,8 +79,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               name='country'
               label='Country'
               variant='outlined'
-              value={formData.country}
-              onChange={handleChange('country')}
               error={!!errors.country}
               helperText={errors.country?.message}
               fullWidth
@@ -99,8 +90,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               name='phoneNumber'
               label='Phone Number'
               variant='outlined'
-              value={formData.phoneNumber}
-              onChange={handleChange('phoneNumber')}
               error={!!errors.phoneNumber}
               helperText={errors.phoneNumber?.message}
               InputProps={{
@@ -118,8 +107,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               type={showPassword ? 'text' : 'password'}
               label='Password'
               variant='outlined'
-              value={formData.password}
-              onChange={handleChange('password')}
               error={!!errors.password}
               helperText={errors.password?.message}
               InputProps={{
@@ -144,8 +131,6 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
               type={showConfirmPassword ? 'text' : 'password'}
               label='Confirm Password'
               variant='outlined'
-              value={formData.confirmPassword}
-              onChange={handleChange('confirmPassword')}
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword?.message}
               InputProps={{
@@ -180,4 +165,3 @@ const Step1 = ({ nextStep, formData, setFormData }) => {
 };
 
 export default Step1;
-

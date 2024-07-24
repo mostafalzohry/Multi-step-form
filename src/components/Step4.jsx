@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import buttonStyles from "../styles/buttonStyles";
 
-const Step4 = ({ prevStep, formData, onSubmitForm }) => {
+const Step4 = ({ prevStep, formData, onSubmitForm, loading }) => {
   return (
     <Box
       sx={{
@@ -27,20 +27,23 @@ const Step4 = ({ prevStep, formData, onSubmitForm }) => {
       </Typography>
 
       <Box display="flex" justifyContent="flex-end" mt={2}>
-        <Button
-          onClick={prevStep}
-          variant="contained"
-          sx={buttonStyles.backButton}
-        >
-          Back
-        </Button>
+        {!loading && (
+          <Button
+            onClick={prevStep}
+            variant="contained"
+            sx={buttonStyles.backButton}
+          >
+            Back
+          </Button>
+        )}
         <Button
           onClick={onSubmitForm}
           variant="contained"
           color="primary"
           sx={buttonStyles.nextButton}
+          disabled={loading}
         >
-          Confirm
+          {loading ? 'Submitting...' : 'Confirm'}
         </Button>
       </Box>
     </Box>
